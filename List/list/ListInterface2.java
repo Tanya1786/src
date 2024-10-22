@@ -9,4 +9,5 @@ public interface ListInterface2<T> {
     int getLength();
     boolean isEmpty();
     T[] toArray();
+    void reverse();
 }
