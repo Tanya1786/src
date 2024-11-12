@@ -1,9 +1,8 @@
 package cheatsheet.Queue;
-import javax.swing.JOptionPane;
 
 public class LinkedQueue<T> implements QueueInterface<T> {
-    private Node frontNode; // References node at the front of the queue
-    private Node backNode;  // References node at the back of the queue
+    private Node<T> frontNode; 
+    private Node<T> backNode;  
 
     public LinkedQueue() {
         frontNode = null;
@@ -12,7 +11,7 @@ public class LinkedQueue<T> implements QueueInterface<T> {
 
     @Override
     public void enqueue(T newEntry) {
-        Node newNode = new Node(newEntry, null);
+        Node<T> newNode = new Node<>(newEntry, null);
         if (isEmpty()) {
             frontNode = newNode;
         } else {
@@ -57,42 +56,16 @@ public class LinkedQueue<T> implements QueueInterface<T> {
 
     public void printQueue() {
         if (isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Queue is empty.");
+            System.out.println("Queue is empty.");
             return;
         }
 
         StringBuilder queueContents = new StringBuilder("Queue: ");
-        Node currentNode = frontNode;
+        Node<T> currentNode = frontNode;
         while (currentNode != null) {
             queueContents.append(currentNode.getData()).append(" ");
             currentNode = currentNode.getNextNode();
         }
-        JOptionPane.showMessageDialog(null, queueContents.toString().trim());
-    }
-
-    private class Node {
-        private T data;
-        private Node next;
-
-        private Node(T data, Node next) {
-            this.data = data;
-            this.next = next;
-        }
-
-        public T getData() {
-            return data;
-        }
-
-        public void setData(T data) {
-            this.data = data;
-        }
-
-        public Node getNextNode() {
-            return next;
-        }
-
-        public void setNextNode(Node next) {
-            this.next = next;
-        }
+        System.out.println(queueContents.toString().trim());
     }
 }

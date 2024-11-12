@@ -1,16 +1,18 @@
 package cheatsheet.Stack;
 
-import javax.swing.JOptionPane;
 import java.util.EmptyStackException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class LinkedStackDemo {
 
     public static void main(String[] args) {
         LinkedStack<String> stack = new LinkedStack<>();
-        int choice = 0; // Initialize choice to avoid uninitialized variable error
+        boolean running = true;
+        Scanner scanner = new Scanner(System.in);
 
-        do {
-            String menu = """
+        while (running) {
+            System.out.println("""
                     Choose an operation:
                     1. Push
                     2. Pop
@@ -19,54 +21,56 @@ public class LinkedStackDemo {
                     5. Clear
                     6. Print
                     7. Exit
-                    """;
-
-            String choiceStr = JOptionPane.showInputDialog(menu);
-            if (choiceStr == null) break; // Exit if Cancel is pressed
+                    """);
 
             try {
-                choice = Integer.parseInt(choiceStr);
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); 
 
                 switch (choice) {
                     case 1 -> {
-                        String newEntry = JOptionPane.showInputDialog("Enter a value to push onto the stack:");
-                        if (newEntry != null) {
-                            stack.push(newEntry);
-                            JOptionPane.showMessageDialog(null, newEntry + " has been pushed onto the stack.");
-                        }
+                        System.out.print("Enter a value to push onto the stack: ");
+                        String newEntry = scanner.nextLine();
+                        stack.push(newEntry);
+                        System.out.println(newEntry + " has been pushed onto the stack.");
                     }
                     case 2 -> {
                         String poppedValue = stack.pop();
-                        JOptionPane.showMessageDialog(null, "Popped value: " + poppedValue);
+                        System.out.println("Popped value: " + poppedValue);
                     }
                     case 3 -> {
                         String topValue = stack.peek();
-                        JOptionPane.showMessageDialog(null, "Top value: " + topValue);
+                        System.out.println("Top value: " + topValue);
                     }
                     case 4 -> {
                         boolean isEmpty = stack.isEmpty();
-                        JOptionPane.showMessageDialog(null, "Stack is " + (isEmpty ? "empty." : "not empty."));
+                        System.out.println("Stack is " + (isEmpty ? "empty." : "not empty."));
                     }
                     case 5 -> {
                         stack.clear();
-                        JOptionPane.showMessageDialog(null, "Stack has been cleared.");
+                        System.out.println("Stack has been cleared.");
                     }
                     case 6 -> {
                         String stackContents = printStack(stack);
-                        JOptionPane.showMessageDialog(null, "Stack contents:\n" + stackContents);
+                        System.out.println("Stack contents:\n" + stackContents);
                     }
-                    case 7 -> JOptionPane.showMessageDialog(null, "Bye");
-                    default -> JOptionPane.showMessageDialog(null, "Invalid choice. Please select a number between 1 and 7.");
+                    case 7 -> {
+                        System.out.println("Bye");
+                        running = false;
+                    }
+                    default -> System.out.println("Invalid choice. Please select a number between 1 and 7.");
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); 
             } catch (EmptyStackException e) {
-                JOptionPane.showMessageDialog(null, "Error: Stack is empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Error: Stack is empty.");
             }
-        } while (choice != 7); // Loop until user chooses to exit
+        }
+        scanner.close();
     }
 
-    // Helper method to print the stack without modifying it
     private static String printStack(LinkedStack<String> stack) {
         LinkedStack<String> tempStack = new LinkedStack<>();
         StringBuilder stackContents = new StringBuilder();
@@ -74,10 +78,9 @@ public class LinkedStackDemo {
         while (!stack.isEmpty()) {
             String data = stack.pop();
             stackContents.insert(0, data + "\n");
-            tempStack.push(data); // Store values temporarily
+            tempStack.push(data); 
         }
 
-        // Restore stack to its original state
         while (!tempStack.isEmpty()) {
             stack.push(tempStack.pop());
         }

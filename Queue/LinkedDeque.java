@@ -1,5 +1,4 @@
 package cheatsheet.Queue;
-import javax.swing.JOptionPane;
 
 public final class LinkedDeque<T> implements DequeInterface<T> {
     private DLNode firstNode; // References node at front of deque
@@ -97,7 +96,7 @@ public final class LinkedDeque<T> implements DequeInterface<T> {
 
     public void printDeque() {
         if (isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Deque is empty.");
+            System.out.println("Deque is empty.");
             return;
         }
 
@@ -107,7 +106,7 @@ public final class LinkedDeque<T> implements DequeInterface<T> {
             dequeContents.append(currentNode.getData()).append(" ");
             currentNode = currentNode.getNextNode();
         }
-        JOptionPane.showMessageDialog(null, dequeContents.toString().trim());
+        System.out.println(dequeContents.toString().trim());
     }
 
     private class DLNode {

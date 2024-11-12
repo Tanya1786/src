@@ -1,57 +1,73 @@
 package cheatsheet.Stack;
 
-import javax.swing.*;
 import java.util.EmptyStackException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class ArrayStackDemo {
     public static void main(String[] args) {
         ArrayStack<String> stack = new ArrayStack<>();
         boolean running = true;
+        Scanner scanner = new Scanner(System.in);
 
         while (running) {
             // Define the menu options
-            String[] options = {"Push", "Pop", "Peek", "Is Empty", "Clear", "Print", "Exit"};
-            int choice = JOptionPane.showOptionDialog(null, "Choose Stack Operation", "Array Stack Demo",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            System.out.println("Choose Stack Operation:");
+            System.out.println("1. Push");
+            System.out.println("2. Pop");
+            System.out.println("3. Peek");
+            System.out.println("4. Is Empty");
+            System.out.println("5. Clear");
+            System.out.println("6. Print");
+            System.out.println("7. Exit");
 
             try {
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+
                 switch (choice) {
-                    case 0: // Push
-                        String input = JOptionPane.showInputDialog("Enter element to push:");
-                        if (input != null) {
-                            stack.push(input);
-                            JOptionPane.showMessageDialog(null, input + " pushed onto the stack.");
-                        }
+                    case 1: // Push
+                        System.out.print("Enter element to push: ");
+                        String input = scanner.nextLine();
+                        stack.push(input);
+                        System.out.println(input + " pushed onto the stack.");
                         break;
-                    case 1: // Pop
+                    case 2: // Pop
                         String poppedElement = stack.pop();
-                        JOptionPane.showMessageDialog(null, "Popped: " + poppedElement);
+                        System.out.println("Popped: " + poppedElement);
                         break;
-                    case 2: // Peek
+                    case 3: // Peek
                         String topElement = stack.peek();
-                        JOptionPane.showMessageDialog(null, "Top element: " + topElement);
+                        System.out.println("Top element: " + topElement);
                         break;
-                    case 3: // Is Empty
-                        JOptionPane.showMessageDialog(null, "Is Empty: " + stack.isEmpty());
+                    case 4: // Is Empty
+                        System.out.println("Is Empty: " + stack.isEmpty());
                         break;
-                    case 4: // Clear
+                    case 5: // Clear
                         stack.clear();
-                        JOptionPane.showMessageDialog(null, "Stack cleared.");
+                        System.out.println("Stack cleared.");
                         break;
-                    case 5: // Print
-                        JOptionPane.showMessageDialog(null, stack.toString());
+                    case 6: // Print
+                        System.out.println(stack.toString());
                         break;
-                    case 6: // Exit
+                    case 7: // Exit
                         running = false;
                         break;
                     default:
+                        System.out.println("Invalid choice. Please select a number between 1 and 7.");
                         break;
                 }
             } catch (EmptyStackException e) {
-                JOptionPane.showMessageDialog(null, "Stack is empty. Cannot perform this operation.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Stack is empty. Cannot perform this operation.");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // consume invalid input
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Error: " + e.getMessage());
             }
         }
+
+        // Close the scanner
+        scanner.close();
     }
 }

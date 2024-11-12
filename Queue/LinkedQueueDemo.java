@@ -1,14 +1,16 @@
 package cheatsheet.Queue;
 
-import javax.swing.JOptionPane;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class LinkedQueueDemo {
     public static void main(String[] args) {
         LinkedQueue<String> queue = new LinkedQueue<>();
         boolean running = true;
+        Scanner scanner = new Scanner(System.in);
 
         while (running) {
-            String menu = """
+            System.out.println("""
                     Choose an operation:
                     1. Enqueue
                     2. Dequeue
@@ -17,52 +19,53 @@ public class LinkedQueueDemo {
                     5. Clear
                     6. Print Queue
                     7. Exit
-                    """;
-
-            String choiceStr = JOptionPane.showInputDialog(menu);
-            if (choiceStr == null) break;
+                    """);
 
             try {
-                int choice = Integer.parseInt(choiceStr);
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); 
 
                 switch (choice) {
                     case 1 -> {
-                        String newEntry = JOptionPane.showInputDialog("Enter a value to enqueue:");
-                        if (newEntry != null) {
-                            queue.enqueue(newEntry);
-                            JOptionPane.showMessageDialog(null, newEntry + " has been enqueued.");
-                        }
+                        System.out.print("Enter a value to enqueue: ");
+                        String newEntry = scanner.nextLine();
+                        queue.enqueue(newEntry);
+                        System.out.println(newEntry + " has been enqueued.");
                     }
                     case 2 -> {
                         String dequeuedValue = queue.dequeue();
-                        JOptionPane.showMessageDialog(null, "Dequeued value: " + dequeuedValue);
+                        System.out.println("Dequeued value: " + dequeuedValue);
                     }
                     case 3 -> {
                         String frontValue = queue.getFront();
-                        JOptionPane.showMessageDialog(null, "Front value: " + frontValue);
+                        System.out.println("Front value: " + frontValue);
                     }
                     case 4 -> {
                         boolean isEmpty = queue.isEmpty();
-                        JOptionPane.showMessageDialog(null, "Queue is " + (isEmpty ? "empty." : "not empty."));
+                        System.out.println("Queue is " + (isEmpty ? "empty." : "not empty."));
                     }
                     case 5 -> {
                         queue.clear();
-                        JOptionPane.showMessageDialog(null, "Queue has been cleared.");
+                        System.out.println("Queue has been cleared.");
                     }
                     case 6 -> {
                         queue.printQueue();
                     }
                     case 7 -> {
-                        JOptionPane.showMessageDialog(null, "Exiting...");
+                        System.out.println("Exiting...");
                         running = false;
                     }
-                    default -> JOptionPane.showMessageDialog(null, "Invalid choice. Please select a number between 1 and 7.");
+                    default -> System.out.println("Invalid choice. Please select a number between 1 and 7.");
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); 
             } catch (EmptyQueueException e) {
-                JOptionPane.showMessageDialog(null, "Error: Queue is empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Error: Queue is empty.");
             }
         }
+
+        scanner.close();
     }
 }

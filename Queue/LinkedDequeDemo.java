@@ -1,14 +1,17 @@
 package cheatsheet.Queue;
 
-import javax.swing.JOptionPane;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class LinkedDequeDemo {
     public static void main(String[] args) {
         LinkedDeque<String> deque = new LinkedDeque<>();
         boolean running = true;
+        Scanner scanner = new Scanner(System.in);
 
         while (running) {
-            String menu = """
+            // Display the menu options
+            System.out.println("""
                     Choose an operation:
                     1. Add to Front
                     2. Add to Back
@@ -20,67 +23,86 @@ public class LinkedDequeDemo {
                     8. Clear
                     9. Print Deque
                     10. Exit
-                    """;
-
-            String choiceStr = JOptionPane.showInputDialog(menu);
-            if (choiceStr == null) break;
+                    """);
 
             try {
-                int choice = Integer.parseInt(choiceStr);
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
 
                 switch (choice) {
                     case 1 -> {
-                        String newEntry = JOptionPane.showInputDialog("Enter a value to add to the front:");
-                        if (newEntry != null) {
-                            deque.addToFront(newEntry);
-                            JOptionPane.showMessageDialog(null, newEntry + " has been added to the front.");
-                        }
+                        System.out.print("Enter a value to add to the front: ");
+                        String newEntry = scanner.nextLine();
+                        deque.addToFront(newEntry);
+                        System.out.println(newEntry + " has been added to the front.");
                     }
                     case 2 -> {
-                        String newEntry = JOptionPane.showInputDialog("Enter a value to add to the back:");
-                        if (newEntry != null) {
-                            deque.addToBack(newEntry);
-                            JOptionPane.showMessageDialog(null, newEntry + " has been added to the back.");
-                        }
+                        System.out.print("Enter a value to add to the back: ");
+                        String newEntry = scanner.nextLine();
+                        deque.addToBack(newEntry);
+                        System.out.println(newEntry + " has been added to the back.");
                     }
                     case 3 -> {
                         String frontValue = deque.removeFront();
-                        JOptionPane.showMessageDialog(null, "Removed front value: " + frontValue);
+                        System.out.println("Removed front value: " + frontValue);
                     }
                     case 4 -> {
                         String backValue = deque.removeBack();
-                        JOptionPane.showMessageDialog(null, "Removed back value: " + backValue);
+                        System.out.println("Removed back value: " + backValue);
                     }
                     case 5 -> {
                         String frontValue = deque.getFront();
-                        JOptionPane.showMessageDialog(null, "Front value: " + frontValue);
+                        System.out.println("Front value: " + frontValue);
                     }
                     case 6 -> {
                         String backValue = deque.getBack();
-                        JOptionPane.showMessageDialog(null, "Back value: " + backValue);
+                        System.out.println("Back value: " + backValue);
                     }
                     case 7 -> {
                         boolean isEmpty = deque.isEmpty();
-                        JOptionPane.showMessageDialog(null, "Deque is " + (isEmpty ? "empty." : "not empty."));
+                        System.out.println("Deque is " + (isEmpty ? "empty." : "not empty."));
                     }
                     case 8 -> {
                         deque.clear();
-                        JOptionPane.showMessageDialog(null, "Deque has been cleared.");
+                        System.out.println("Deque has been cleared.");
                     }
                     case 9 -> {
-                        deque.printDeque();
+                        String dequeContents = printDeque(deque);
+                        System.out.println("Deque contents:\n" + dequeContents);
                     }
                     case 10 -> {
-                        JOptionPane.showMessageDialog(null, "Exiting...");
+                        System.out.println("Exiting...");
                         running = false;
                     }
-                    default -> JOptionPane.showMessageDialog(null, "Invalid choice. Please select a number between 1 and 10.");
+                    default -> System.out.println("Invalid choice. Please select a number between 1 and 10.");
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // consume invalid input
             } catch (EmptyQueueException e) {
-                JOptionPane.showMessageDialog(null, "Error: Deque is empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Error: Deque is empty.");
             }
         }
+
+        // Close the scanner
+        scanner.close();
+    }
+
+    // Helper method to print the deque without modifying it
+    private static String printDeque(LinkedDeque<String> deque) {
+        StringBuilder dequeContents = new StringBuilder();
+
+        try {
+            while (!deque.isEmpty()) {
+                String data = deque.removeFront();
+                dequeContents.append(data).append("\n");
+                deque.addToBack(data); // Add back to preserve the original order
+            }
+        } catch (EmptyQueueException e) {
+            // This should not happen as we are using isEmpty() check
+        }
+
+        return dequeContents.toString().trim();
     }
 }

@@ -1,5 +1,4 @@
 package cheatsheet.Queue;
-import javax.swing.JOptionPane;
 
 public final class CircularArrayQueue<T> implements QueueInterface<T> {
     private T[] queue;
@@ -8,7 +7,6 @@ public final class CircularArrayQueue<T> implements QueueInterface<T> {
     private boolean integrityOK = false;
     private static final int DEFAULT_CAPACITY = 50;
     private static final int MAX_CAPACITY = 10000;
-
     public CircularArrayQueue() {
         this(DEFAULT_CAPACITY);
     }
@@ -17,7 +15,7 @@ public final class CircularArrayQueue<T> implements QueueInterface<T> {
         checkCapacity(initialCapacity);
 
         @SuppressWarnings("unchecked")
-        T[] tempQueue = (T[]) new Object[initialCapacity + 1]; // +1 to avoid confusion with full
+        T[] tempQueue = (T[]) new Object[initialCapacity + 1]; 
         queue = tempQueue;
         frontIndex = 0;
         backIndex = initialCapacity;
@@ -62,7 +60,7 @@ public final class CircularArrayQueue<T> implements QueueInterface<T> {
     }
 
     private void ensureCapacity() {
-        if (frontIndex == ((backIndex + 2) % queue.length)) { // If array is full
+        if (frontIndex == ((backIndex + 2) % queue.length)) { 
             T[] oldQueue = queue;
             int oldSize = oldQueue.length;
             int newSize = 2 * oldSize;
@@ -102,22 +100,6 @@ public final class CircularArrayQueue<T> implements QueueInterface<T> {
         while (!isEmpty()) {
             dequeue();
         }
-    }
-
-    public void printQueue() {
-        checkIntegrity();
-        if (isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Queue is empty.");
-            return;
-        }
-
-        StringBuilder queueContents = new StringBuilder("Queue: ");
-        int index = frontIndex;
-        while (index != (backIndex + 1) % queue.length) {
-            queueContents.append(queue[index]).append(" ");
-            index = (index + 1) % queue.length;
-        }
-        JOptionPane.showMessageDialog(null, queueContents.toString().trim());
     }
 
     @Override
